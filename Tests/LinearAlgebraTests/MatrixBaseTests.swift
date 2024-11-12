@@ -1,4 +1,4 @@
-// LinearAlgebraTests.swift
+// MatrixBaseTests.swift
 //
 // This file is part of the SwiftNum project.
 // Licensed under the MIT licence, © 2024.
@@ -72,25 +72,50 @@ struct MatrixBaseTests {
 			])
 		#expect(diagonalMatrix.isDiagonal)
 	}
-}
 
-@Suite("Matrix math tests")
-struct MatrixMathTests {
-	@Test("Matrix transposition")
-	func matrixTransposition() {
-		let matrix = Matrix(values:
+	@Test("Determinant")
+	func determinant() {
+		let twoByTwoMatrix = Matrix(values:
+			[
+				[1, 2],
+				[3, 4]
+			])
+		#expect(twoByTwoMatrix.determinant == -2)
+
+		let threeByThreeMatrix = Matrix(values:
 			[
 				[1, 2, 3],
 				[4, 5, 6],
 				[7, 8, 9]
 			])
-		let expectedMatrix = Matrix(values:
-			[
-				[1, 4, 7],
-				[2, 5, 8],
-				[3, 6, 9]
-			])
+		#expect(threeByThreeMatrix.determinant == 0)
+	}
 
-		#expect(matrix.transposed() == expectedMatrix)
+	@Test("Identity Matrix")
+	func identityMatrix() {
+		let twoByTwoMatrix = Matrix(values:
+			[
+				[1.0, 2],
+				[3, 4]
+			])
+		let twoByTwoIdentityMatrix = Matrix(values:
+			[
+				[1, 0],
+				[0, 1]
+			])
+		#expect(twoByTwoMatrix.identityMatrix == twoByTwoIdentityMatrix)
+		let threeByThreeMatrix = Matrix(values:
+			[
+				[1, 2, 3],
+				[4, 5, 6],
+				[7, 8, 9]
+			])
+		let threeByThreeIdentityMatrix = Matrix(values:
+			[
+				[1, 0, 0],
+				[0, 1, 0],
+				[0, 0, 1]
+			])
+		#expect(threeByThreeMatrix.identityMatrix == threeByThreeIdentityMatrix)
 	}
 }

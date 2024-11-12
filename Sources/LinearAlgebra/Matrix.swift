@@ -114,4 +114,52 @@ public struct Matrix<T: Numeric>: Equatable {
 		}
 		return true
 	}
+
+	/// The determinant of a square matrix.
+	///
+	/// - Warning: This computed variable currently only works for 2x2 and 3x3 matrices.
+	public var determinant: T {
+		precondition(rowCount == columnCount, "Matrix must be square.")
+		switch rowCount {
+			case 2:
+				return twoByTwoDeterminant()
+			case 3:
+				return threeByThreeDeterminant()
+			default:
+				fatalError("Unsupported matrix size")
+		}
+	}
+
+	/// The identiy matrix of a square matrix.
+	public var identityMatrix: Matrix<Int> {
+		precondition(rowCount == columnCount, "Matrix must be square.")
+		var matrix = Matrix<Int>(rows: rowCount, columns: columnCount, initialValue: 0)
+		for (rowIndex, row) in matrix.grid.enumerated() {
+			for (columnIndex, _) in row.enumerated() where columnIndex == rowIndex {
+				matrix[rowIndex][columnIndex] = 1
+			}
+		}
+		return matrix
+	}
+
+	private func twoByTwoDeterminant() -> T {
+		self[0, 0] * self[1, 1] - self[0, 1] * self[1, 0]
+	}
+
+	private func threeByThreeDeterminant() -> T {
+		let a: T = self[0][0]
+		let b: T = self[0][1]
+		let c: T = self[0][2]
+		let d: T = self[1][0]
+		let e: T = self[1][1]
+		let f: T = self[1][2]
+		let g: T = self[2][0]
+		let h: T = self[2][1]
+		let i: T = self[2][2]
+		let splitResultA: T = a * (e * i - f * h)
+		let splitResultB: T = b * (d * i - f * g)
+		let splitResultC: T = c * (d * h - e * g)
+
+		return splitResultA - splitResultB + splitResultC
+	}
 }

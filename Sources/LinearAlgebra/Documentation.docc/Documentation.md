@@ -9,3 +9,9 @@ For now, the package supports basic linear algebra, but it is planned to add mor
 ## Topics
 
 - ``Matrix``
+
+### Mathematical Operations
+
+- ``Matrix/augment(with:)``
+- ``Matrix/transposed()``
+- ``Matrix/inversed()``
