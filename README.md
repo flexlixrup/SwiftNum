@@ -6,11 +6,11 @@
 
 ## Overview
 
-This package extends the Swift Foundation framework with extensions to existing types and (in future) entirely new types.
+SwiftNum (Swift Numerics) provides different numeric functionalities to Swift, similiar to [numpy](https://numpy.org) for Python.
 
 ## Requirements
 
-Swift 6.0+
+Swift 5.10+
 
 ## Installation
 
