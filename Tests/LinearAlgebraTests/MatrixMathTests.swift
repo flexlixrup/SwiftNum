@@ -28,7 +28,7 @@ struct MatrixMathTests {
 	}
 
 	@Test("Matrix augmention")
-	func matrixAugmentation() {
+	func matrixAugmentation() throws {
 		let matrix = Matrix(values:
 			[
 				[1, 2, 3],
@@ -43,11 +43,11 @@ struct MatrixMathTests {
 				[7, 8, 9, 12]
 			])
 
-		#expect(matrix.augment(with: vector) == expectedMatrix)
+		#expect(try matrix.augmented(with: vector) == expectedMatrix)
 	}
 
 	@Test("Matrix inversion")
-	func matrixInversion() {
+	func matrixInversion() throws {
 		let matrix = Matrix(values:
 			[
 				[1, 5],
@@ -63,12 +63,29 @@ struct MatrixMathTests {
 			}
 		}
 
-		let inversedMatrix = matrix.inversed().grid.map { row in
+		let inversedMatrix = try! matrix.inversed().grid.map { row in
 			row.map {
 				$0.rounded()
 			}
 		}
 
 		#expect(inversedMatrix == expectedMatrix)
+	}
+
+	@Test("Multiply Test")
+	func multiplyTest() throws {
+		let matrix = Matrix(values:
+			[
+				[1, 2, 3],
+				[4, 5, 6],
+				[7, 8, 9]
+			])
+		let vector = Matrix(vector: [10, 11, 12])
+
+		let mulMatrix = try matrix.multiplied(by: vector)
+		#expect(Matrix(vector: [68, 167, 266]) == mulMatrix)
+
+		let mulMatrixInfix = matrix * vector
+		#expect(Matrix(vector: [68, 167, 266]) == mulMatrixInfix)
 	}
 }

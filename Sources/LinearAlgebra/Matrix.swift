@@ -162,4 +162,12 @@ public struct Matrix<T: Numeric>: Equatable {
 
 		return splitResultA - splitResultB + splitResultC
 	}
+
+	static func * (lhs: Matrix<T>, rhs: Matrix<T>) -> Matrix<T> {
+		do {
+			return try lhs.multiplied(by: rhs)
+		} catch {
+			fatalError("Invalid dimension.")
+		}
+	}
 }

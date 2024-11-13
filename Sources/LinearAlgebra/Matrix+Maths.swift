@@ -9,6 +9,7 @@ public extension Matrix {
 	/// - Returns: The transposed matrix.
 	///
 	/// A transposed matrix is a matrix with its rows and columns switched.
+	@inlinable
 	func transposed() -> Matrix<T> {
 		let firstRow = grid.first!
 		let transposedValues = (0 ..< firstRow.count).map { columnIndex in
@@ -20,8 +21,10 @@ public extension Matrix {
 	/// Augments a matrix with another matrix.
 	/// - Parameter matrix: The matrix to augment.
 	/// - Returns: The new augmented matrix.
-	func augment(with matrix: Matrix<T>) -> Matrix<T> {
-		precondition(rowCount == matrix.rowCount, "You can only augment matrices with the same row count.")
+	func augmented(with matrix: Matrix<T>) throws -> Matrix<T> {
+		guard rowCount == matrix.rowCount else {
+			throw LinearAlgebraErrors.invalidDimension
+		}
 		var newMatrix = Matrix(rows: rowCount, columns: columnCount + matrix.columnCount, initialValue: 0)
 		for row in 0 ..< rowCount {
 			let augmentedRow = self[row] + matrix[row]
@@ -32,13 +35,14 @@ public extension Matrix {
 
 	/// Inverse a matrix.
 	/// - Returns: The inversed matrix as a Matrix\<Double\>.
-	func inversed() -> Matrix<Double> {
-		precondition(isSquare, "Matrix must be square.")
-		precondition(determinant != 0, "Matrix must have a non-zero determinant.")
+	func inversed() throws -> Matrix<Double> {
+		guard isSquare && determinant != 0 else {
+			throw LinearAlgebraErrors.invalidDimension
+		}
 		// Convert to double
 		let originalDoubleMatrix = Matrix<Double>(values: doubleValues)
 		let doubleIdentityMatrix = Matrix<Double>(values: identityMatrix.doubleValues)
-		var augmentedMatrix = originalDoubleMatrix.augment(with: doubleIdentityMatrix)
+		var augmentedMatrix = try originalDoubleMatrix.augmented(with: doubleIdentityMatrix)
 		for i in 0 ..< rowCount {
 			let pivot = augmentedMatrix[i][i]
 			for j in 0 ..< 2 * rowCount {
@@ -62,5 +66,26 @@ public extension Matrix {
 			}
 		}
 		return inverseMatrix
+	}
+	
+	/// Multiply 2 matrices
+	/// - Parameter matrix: The matrix you want to multiply by.
+	/// - Returns: The multiplied matrix.
+	func multiplied(by matrix: Matrix<T>) throws -> Matrix<T> {
+		guard columnCount == matrix.rowCount else {
+			throw LinearAlgebraErrors.invalidDimension
+		}
+		var newMatrix = Matrix(rows: rowCount, columns: matrix.columnCount, initialValue: 0)
+		for row in 0 ..< rowCount {
+			for col in 0 ..< matrix.columnCount {
+				var cellValue: T = 0
+
+				for k in 0 ..< columnCount {
+					cellValue += self[row][k] * matrix[k][col]
+				}
+				newMatrix[row][col] = cellValue
+			}
+		}
+		return newMatrix
 	}
 }

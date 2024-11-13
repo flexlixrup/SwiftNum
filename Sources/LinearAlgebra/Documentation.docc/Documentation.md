@@ -12,6 +12,7 @@ For now, the package supports basic linear algebra, but it is planned to add mor
 
 ### Mathematical Operations
 
-- ``Matrix/augment(with:)``
+- ``Matrix/augmented(with:)``
 - ``Matrix/transposed()``
 - ``Matrix/inversed()``
+- ``Matrix/multiplied(by:)``
